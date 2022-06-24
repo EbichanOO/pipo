@@ -19,4 +19,4 @@ ENV CGO_CFLAGS="-I/usr/include"
 COPY . /go/src/calc_server/
 WORKDIR /go/src/calc_server/go/crawler/
 
-CMD ["go", "run", "."]
+ENTRYPOINT ["go", "run", "."]

@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"net/http"
-	"time"
 	"sort"
 	"regexp"
 	"strings"
@@ -56,12 +55,6 @@ const (
 	db_name = "test.db"
 )
 
-type db_data struct {
-	id int
-	word string
-	articleIDs []int // articleID,articleID,articleID,...
-}
-
 func DBinit() (error){
 	// 正常に生成出来たらnilを返す
 	db, err := sql.Open("sqlite3", db_path+db_name)
@@ -111,50 +104,50 @@ func getAllWordInArticle() (string, error) {
 	return "", err
 }
 
-func getWordID(data *db_data) (error) {
+func getWordID(word string) (id int,err error) {
 	db, err := sql.Open("sqlite3", db_path+db_name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer db.Close()
 
 	res := db.QueryRow(
 		`SELECT * FROM words WHERE word=?`,
-		data.word,
+		word,
 	)
-	err = res.Scan(&data.id)
+	err = res.Scan(&id)
 	if err!=nil {
-		return err
+		return nil, err
 	}
-	return nil
+	return
 }
 
-func getArticleIDs(data *db_data) (error) {
+func getArticleIDs(wordID int) (articleIDs []int, err error) {
 	db, err := sql.Open("sqlite3", db_path+db_name)
 	if err != nil {
-		return err
+		return nil, err
 	}
 	defer db.Close()
 
 	res, err := db.Query(
 		`select article_id from article_words where word_id=?`,
-		data.id,
+		wordID,
 	)
 	if err != nil {
-		return err
+		return nil, err
 	}
-	data.articleIDs = nil
+
 	for res.Next() {
-		var article_id int
-		if err := res.Scan(&article_id);err!=nil {
-			return err
+		var id int
+		if err := res.Scan(&id);err!=nil {
+			return nil, err
 		}
-		data.articleIDs = append(data.articleIDs, article_id)
+		articleIDs = append(articleIDs, id)
 	}
-	return nil
+	return
 }
 
-func insertNewWord(data *db_data) (error){
+func insertNewWord(word string, articleIDs []int) (error){
 	db, err := sql.Open("sqlite3", db_path+db_name)
 	if err != nil {
 		return err
@@ -164,20 +157,20 @@ func insertNewWord(data *db_data) (error){
 	// 単語を追加する
 	res, err := db.Exec(
 		`insert into words (word) values (?)`,
-		data.word,
+		word,
 	)
 	if err != nil {
 		return err
 	}
 	// 追加したidを取得して記事と結びつける
-	word_id,err := res.LastInsertId()
+	wordID,err := res.LastInsertId()
 	if err != nil {
 		return err
 	}
 	_, err = db.Exec(
 		`insert into article_words (word_id, article_id) values (?,?)`,
-		word_id,
-		data.articleIDs[0],
+		wordID,
+		articleIDs[0],
 	)
 	if err!= nil {
 		return err
@@ -185,7 +178,7 @@ func insertNewWord(data *db_data) (error){
 	return nil
 }
 
-func updateArticleID(data *db_data) (error){
+func updateArticleID(word string,articleIDs []int) (error){
 	db, err := sql.Open("sqlite3", db_path+db_name)
 	if err != nil {
 		return err
@@ -194,26 +187,26 @@ func updateArticleID(data *db_data) (error){
 
 	res := db.QueryRow(
 		`SELECT id FROM words WHERE word=?`,
-		data.word,
+		word,
 	)
 
-	err = res.Scan(&data.id)
+	var wordID int
+	err = res.Scan(&wordID)
 	if err!=nil {
 		return err
 	}
-	storeStruct := db_data{}
-	copier.Copy(&storeStruct, data) // deep copy
 	
-	err = getArticleIDs(&storeStruct)
+	var articleIDsLOG []int
+	articleIDsLOG, err = getArticleIDs(wordID)
 	if err!=nil {
 		return err
 	}
 
-	diff := getIntListDiff(data.articleIDs, storeStruct.articleIDs)
+	diff := getIntListDiff(articleIDs, articleIDsLOG)
 	for _,articleId := range diff {
 		_, err = db.Exec(
 			`insert into article_words (word_id,article_id) values (?,?)`,
-			data.id,
+			wordID,
 			articleId,
 		)
 		if err != nil {
@@ -325,42 +318,40 @@ type wordScore struct {
 	score int
 }
 
-func getScore(inputText string) score []int {
+func getScore(inputText string) (score []int) {
+	// 入力テキストとDB内の
 	score = fullTextSearch(inputText)
-	return score
+	return
 }
 
-func fullTextSearch(text string) score int {
-	words, err := splitSentenceToWords(text)
+func wordTranslateToID(word string) (id int) {
+	data := dbData{word: word}
+	id = data.id
+	return
+}
+
+func fullTextSearch(text string) (score []int) {
+	//words, err := splitSentenceToWords(text)
+	_, err := splitSentenceToWords(text)
 	if err != nil {
 		panic(err)
 	}
+	/*
 	var wordIDs []int
 	var wordStructs []wordScore
 	maxIndex := 0
-	for _,word := range words {
-		data := db_data{word=word}
-		score := 0
-		wordStructs = append(wordStructs, wordScore{data.id, score})
-	}
+	for i,word := range words {
+		var data dbData
+		data.id = i
+		data.word = word
+		wordStructs = append(wordStructs, wordScore{wordID: data.id, score: score})
+	}*/
+	score = [] int{1, 1}
+	return
 }
 
 func main() {
 	if err := DBinit(); err!=nil {
 		panic(err)
 	}
-
-	inputX := "にじさんじ"
-	wordIDs := translateToID(inputX)
-	ScoreList := getScore(splitX)
-	returnSentence := getSentence(ScoreList)
-	fmt.Println(returnSentence)
-	/*
-	for {
-		V,_ := splitSentenceToArticle(splitArticleToSentence(scrape())[0])
-		for _,list := range V {
-			fmt.Println(list)
-		}
-		time.Sleep(1*time.Hour)
-	}*/
 }
