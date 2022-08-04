@@ -25,7 +25,7 @@ class SearchForm extends React.Component {
             <form onSubmit={this.handleSubmit} >
               <img src={searchImg} className="Search-img" alt="searchGrass" />
               <label>
-                <input type="text" placeholder="Pipoで検索" value={this.state.value} onChange={this.handleChange} />
+                <input type="text" class="Search-input" placeholder="Pipoで検索" value={this.state.value} onChange={this.handleChange} />
               </label>
             </form>
           </div>
