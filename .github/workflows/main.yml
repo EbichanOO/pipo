@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+     - master
+
+jobs:
+  code_test_job:
+    runs-on: ubuntu-latest
+    name: A job to run test code
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      # docker build
+      - name: CI action step
+        uses: ./
+        id: pipo
+      - name: Test step
+        run: go test -v .
