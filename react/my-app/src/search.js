@@ -1,40 +1,32 @@
-import React from 'react';
+import {React, useState} from 'react';
 import searchImg from './search_grass.png';
-import {Link} from 'react-router-dom';
+import {useNavigate} from 'react-router-dom';
 
-class SearchForm extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {value: ''};
-    
-        this.handleChange = this.handleChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
-    }
+function SearchForm() {
+
+  let state = useState();
+  let navigate = useNavigate();
+
+  function handleChange(event) {
+    state.value = event.target.value;
+  }
+
+  function handleSubmit(event) {
+      navigate('search');
+      alert('A name was submitted: ' + state.value);
+      event.preventDefault();
+  }
   
-    handleChange(event) {
-      this.setState({value: event.target.value});
-    }
-  
-    handleSubmit(event) {
-      if(this.state.value!='') {
-        /*this.props.history.push('/search')*/
-        alert('A name was submitted: ' + this.state.value);
-        event.preventDefault();
-      }
-    }
-    
-    render() {
-      return (
-        <div className="Search">
-          <form onSubmit={this.handleSubmit} >
-            <img src={searchImg} className="Search-img" alt="searchGrass" />
-            <label>
-              <input type="text" class="Search-input" placeholder="Pipoで検索" value={this.state.value} onChange={this.handleChange} />
-            </label>
-          </form>
-        </div>
-      );
-    }
+  return (
+    <div className="Search">
+      <form onSubmit={handleSubmit} >
+        <img src={searchImg} className="Search-img" alt="searchGrass" />
+        <label>
+          <input type="text" class="Search-input" placeholder="Pipoで検索" value={state.value} onChange={handleChange} />
+        </label>
+      </form>
+    </div>
+  );
 }
 
 export default SearchForm;
