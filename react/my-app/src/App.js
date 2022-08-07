@@ -18,11 +18,11 @@ function App() {
 
 function Home() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className="Index">
+      <header className="Index-header">
+        <img src={logo} className="Index-logo" alt="logo" />
       </header>
-      <body className="App-body">
+      <body className="Index-body">
         <SearchForm />
       </body>
     </div>
