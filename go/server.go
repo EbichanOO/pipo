@@ -14,6 +14,8 @@ func searchAPI(c *gin.Context) {
 	c.String(200, "search")
 }
 
+func searchUseNotionAPI()
+
 func notionOAuthAPI(c *gin.Context) {
 	c.String(200, "Oauth")
 }
