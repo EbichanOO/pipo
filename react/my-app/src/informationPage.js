@@ -8,11 +8,21 @@ function InfoPage() {
     const location = useLocation();
     const prevSearchWords = String(location.state);
 
+    var articleCardList = [
+        <ArticleCard url="https://www.sejuku.net/blog/60444"/>,
+        <ArticleCard />,
+        <ArticleCard />,
+        <ArticleCard /> ];
+
     return (
         <div className="Info-page">
-            <body className="Info-body">
+            <header className="Info-header">
                 <SearchForm initState={prevSearchWords} />
-                <ArticleCard />
+            </header>
+            <body className="Info-body">
+                <div className="Article-container">
+                    {articleCardList}
+                </div>
             </body>
         </div>
     );

@@ -18,7 +18,6 @@ function SearchForm(props) {
   function handleSubmit(event) {
     event.preventDefault();
     if (state !== ""){
-      alert(state)
       navigate('../search', {replace:true, state:state});
     } 
   }
