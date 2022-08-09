@@ -1,5 +1,3 @@
-import {useNavigate} from 'react-router-dom';
-
 function ArticleCard(props) {
     const articleURL = props.url;
     const articleTitle = props.title;
