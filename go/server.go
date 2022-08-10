@@ -35,16 +35,18 @@ type SortOption struct {
 }
 
 type GetDataParser struct {
-
+	Object string `json:"object"`
+	id string `json:"id"`
 }
 
 func searchUseNotionAPI() {
+	baseURL := "https://api.notion.com/v1"
 	jsonString, err := json.Marshal(RequestNotion{Query: "ソフトウェア", Sort: SortOption{Direction: "descending", Timestamp: "last_edited_time"}})
 	if err != nil {
         panic("Error")
     }
 	
-	req, err := http.NewRequest("POST", "https://api.notion.com/v1/search", bytes.NewBuffer(jsonString))
+	req, err := http.NewRequest("POST", baseURL+"/search", bytes.NewBuffer(jsonString))
 	if err != nil {
         panic("Error")
     }
@@ -70,8 +72,45 @@ func searchUseNotionAPI() {
     if err != nil {
         panic("Error")
     }
+	fmt.Printf("%#v", string(byteArray))
 
-    fmt.Printf("%#v", string(byteArray))
+	// get page data
+	var data []GetDataParser
+	err = json.Unmarshal(byteArray, &data)
+	if err != nil {
+        fmt.Println(err)
+    }
+	fmt.Println(data)
+	/*
+
+	req, err = http.NewRequest("GET", baseURL+"/pages/"+)
+	if err != nil {
+        panic("Error")
+    }
+
+	f, _ = os.Open("secure")
+	token = make([]byte, 64)
+	n,_ = f.Read(token)
+	req.Header.Set("Authorization", "Bearer "+string(token[:n]))
+	req.Header.Add("Accept", "application/json")
+	req.Header.Add("Notion-Version", "2022-06-28")
+	req.Header.Add("Content-Type", "application/json")
+
+	client = new(http.Client)
+	resp, err = client.Do(req)
+	if err != nil {
+		fmt.Print(err)
+        panic("Error")
+    }
+
+	defer resp.Body.Close()
+
+	byteArray, err = ioutil.ReadAll(resp.Body)
+    if err != nil {
+        panic("Error")
+    }
+
+    fmt.Printf("%#v", string(byteArray))*/
 }
 
 func notionOAuthAPI(c *gin.Context) {
