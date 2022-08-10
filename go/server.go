@@ -26,10 +26,20 @@ func searchAPI(c *gin.Context) {
 
 type RequestNotion struct {
 	Query string `json:"query"`
+	Sort SortOption `json:"sort"`
+}
+
+type SortOption struct {
+	Direction string `json:"direction"`
+	Timestamp string `json:"timestamp"`
+}
+
+type GetDataParser struct {
+
 }
 
 func searchUseNotionAPI() {
-	jsonString, err := json.Marshal(RequestNotion{Query: "ソフトウェア"})
+	jsonString, err := json.Marshal(RequestNotion{Query: "ソフトウェア", Sort: SortOption{Direction: "descending", Timestamp: "last_edited_time"}})
 	if err != nil {
         panic("Error")
     }
