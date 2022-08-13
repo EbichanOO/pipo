@@ -193,6 +193,7 @@ func notionOAuthAPI(c *gin.Context) {
 
 func main() {
 	searchUseNotionAPI("ガジェット")
+	// test
 	router := setupRouter()
 	router.Run(":8080")
 }
