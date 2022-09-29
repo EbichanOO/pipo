@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import styles from '../styles/infopage.module.css';
+import styles from '../styles/ArticleCard.module.css';
 
 export default function ArticleCard(props) {
     const router = useRouter()
