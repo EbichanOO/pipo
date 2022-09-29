@@ -1,7 +1,6 @@
 .container {
     height: 100%;
-    margin-left: 10px;
-    margin-right: 10px;
+    margin-top: 10px;
     display: flex;
     flex-flow: row wrap;
     justify-content: left;

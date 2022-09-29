@@ -7,10 +7,11 @@ export default function ArticleCard(props) {
     const articleTitle = props.title;
     const articleParagraph = props.paragraph;
     function redirectToUrl() {router.push(articleURL)}
+
     return (
         <div className={styles.card} onClick={redirectToUrl}>
             <h3>{articleTitle}</h3>
-            <p>{articleParagraph}</p>
+            <p className={styles.context}>{articleParagraph}</p>
         </div>
     );
 }
