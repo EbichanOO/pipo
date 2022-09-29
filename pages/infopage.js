@@ -34,7 +34,9 @@ export default function infoPage({notionData, searchWord}){
             <Head>
                 <title>PIPO</title>
             </Head>
-            <SearchForm initState={searchWord} />
+            <div className={styles.infosearch}>
+                <SearchForm initState={searchWord} />
+            </div>
             <div className={styles.container}>
                 {articleCardList}
             </div>
