@@ -6,18 +6,28 @@ import styles from "../styles/InfoPage.module.css"
 export async function getServerSideProps(context){
     const searchquery = context.query
     const searchWord = searchquery.search
+
+    const host = context.req.headers.host || 'localhost:3000'
+    const protocol = /^localhost/.test(host) ? 'http' : 'https' 
+    const notionData = await fetch(`${protocol}://${host}/api/search/notion/${searchWord}`)
+        .then(data => data.json())
+    
     return {
-       props: {searchWord},
+       props: {
+        notionData,
+        searchWord,
+       },
     }
 }
 
-export default function infoPage({ searchWord }){
-    var articleCardList = [
-        <ArticleCard url="https://www.sejuku.net/blog/60444" key={"sample"}/>,
-        <ArticleCard key={"1"}/>,
-        <ArticleCard key={"2"}/>,
-        <ArticleCard key={"3"}/> 
-    ]
+export default function infoPage({notionData, searchWord}){
+
+    let articleCardList = []
+    for(let i in notionData.results){
+        articleCardList.push(
+            <ArticleCard url={notionData.results[i].url} paragraph={notionData.results[i].context} key={i} />
+        )
+    }
 
     return (
         <>
