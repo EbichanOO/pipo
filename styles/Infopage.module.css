@@ -1,0 +1,10 @@
+.infosearch {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.container {
+    height: 100%;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: left;
+}

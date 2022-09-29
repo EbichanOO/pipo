@@ -1,0 +1,17 @@
+.card {
+    width: 95%;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px #ccc;
+    margin-top: 5px;
+    margin-left: 2.5%;
+    margin-right: 2.5%;
+}
+.card:hover {
+    box-shadow: 0 2px 5px black;
+}
+
+.context {
+    margin-left: 10px;
+    margin-right: 10px;
+}
