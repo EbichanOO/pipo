@@ -1,7 +1,7 @@
 import Head from "next/head";
 import ArticleCard from "../components/articlecard";
 import SearchForm from "../components/searchbox";
-import styles from "../styles/InfoPage.module.css";
+import styles from '../styles/Infopage.module.css';
 
 export async function getServerSideProps(context){
     const searchquery = context.query
