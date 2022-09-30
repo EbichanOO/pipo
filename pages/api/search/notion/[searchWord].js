@@ -5,7 +5,7 @@ export default function notion(req, res){
     const { Client } = require("@notionhq/client")
 
     const notion = new Client({
-        auth: "secret_tG92Vh2nvwyrB7JKJVFfLRAGeTfb4HyW8iIrvm8xuUj",
+        auth: process.env.NOTION_KEY,
     });
 
     (async () => {
