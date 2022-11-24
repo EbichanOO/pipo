@@ -1,11 +1,5 @@
 .searchpage {
   height: 100vh;
-  background-color: #f8f8ff;
-}
-@media (prefers-color-scheme: dark) {
-  .searchpage {
-    background-color: #696969;
-  }
 }
 
 .searchbox {

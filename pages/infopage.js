@@ -30,7 +30,7 @@ export default function infoPage({notionData, searchWord}){
     }
 
     return (
-        <div className={styles.pagebody}>
+        <>
             <Head>
                 <title>PIPO</title>
             </Head>
@@ -40,6 +40,6 @@ export default function infoPage({notionData, searchWord}){
             <div className={styles.container}>
                 {articleCardList}
             </div>
-        </div>
+        </>
     )
 }
