@@ -1,7 +1,6 @@
-# PDIC search system(個人辞書検索システム)
+# PIPO(Personal Information portal)
 
 ## What is
-The software is search system of PDIC. PDIC is a personal dictionary created from your own accumulated data. PDIC is a personal dictionary created from your own data accumulated by some certain service. For example, Notion and Google Docs.
 
 ## How to use
 1. Write something down in Notion.
